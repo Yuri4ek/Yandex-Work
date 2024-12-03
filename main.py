@@ -1,4 +1,5 @@
 import sys
+import io
 
 from PyQt6 import uic  # Импортируем uic
 from PyQt6.QtWidgets import QApplication, QMainWindow
@@ -6,11 +7,14 @@ from PyQt6.QtGui import QPainter, QColor, QPolygonF
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from random import randint
 
+from UI import Ui_MainWindow
 
-class MyWidget(QMainWindow):
+
+class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('UI.ui', self)
+
+        self.setupUi(self)
 
         self.pushButton.clicked.connect(self.run)
 
@@ -22,9 +26,13 @@ class MyWidget(QMainWindow):
         y = randint(100, 500)
         return QPointF(x, y)
 
+    def random_selected_color(self):
+        color = [randint(0, 255), randint(0, 255), randint(0, 255)]
+        return QColor(color[0], color[1], color[2])
+
     def drawer(self, qp):
         size = randint(20, 100)
-        qp.setBrush(QColor(255, 255, 0))
+        qp.setBrush(self.random_selected_color())
         qp.setPen(QColor(0, 0, 0))
 
         qp.drawEllipse(self.random_seat(), size, size)
